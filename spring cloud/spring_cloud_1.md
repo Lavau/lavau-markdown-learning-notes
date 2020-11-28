@@ -126,3 +126,26 @@ Eureka Server 作为服务注册功能的服务器，它是服务注册中心
 
   应用启动后，向 Eureka Server 发送心跳。Eureka Server 在多个心跳周期内没有接受到某个节点的心跳，Eureka Server 将它从服务注册表中除去
 
+## 5.2  类比记忆
+
+Eureka  Server 是业务公司A，Eureka Client 是尚硅谷，学员则是消费者。
+
+*尚硅谷每月A缴纳业务费后，A在自己的大厅里写上尚硅谷入驻*
+
+*Eureka Client 每隔一段时间向 Eureka Server 发送一次心跳，告知 Eureka Server 自己仍在提供服务*
+
+## 5.3  Eureka 集群
+
+<img src="E:\mdFiles\spring cloud\picture\2.png" height=250>
+
+### 5.3.1  微服务 RPC 最核心的内容是？
+
+<span style="color:red; font-size:18px">**高可用**</span>
+
+实现方法：**搭建 Eureka 注册中心集群， 实现负载均衡 + 故障容错**
+
+#### 5.3.1.1  集群工作原理
+
+> **互相注册，相互守望**
+
+<img src="E:\mdFiles\spring cloud\picture\3.png" height=250>
