@@ -61,13 +61,145 @@ String 类型的常量池主要的使用方法：
 
 # 13.5  `intern()` 的使用
 
+Java API 对 `intern()` 的解释：
+
+>Returns a canonical representation for the string object.
+>A pool of strings, initially empty, is maintained privately by the class String.
+>When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned. Otherwise, this String object is added to the pool and a reference to this String object is returned.
+>It follows that for any two strings s and t, s.intern() == t.intern() is true if and only if s.equals(t) is true.
+>All literal strings and string-valued constant expressions are interned. String literals are defined in section 3.10.5 of the The Java™ Language Specification.
 
 
-13.6  String Table 的垃圾回收
+
+使字符串变量 s 指向字符串常量池中数据的方法：
+
+1. 直接字面量赋值
+
+   ```java
+   String str = "Java";
+   ```
+
+2. 调用 `intern()` 方法
+
+   ```java
+   String str = new String("avaj").intern();
+   ```
+
+## 13.5.1  以下代码创建了几个对象
+
+```java
+package com.atguigu.java2;
+
+/**
+ * description 126P——newString() 到底创建了几个对象
+ *
+ * @author Leet
+ * @date 2020-12-28 15:28
+ **/
+public class StringNewTest {
+    public static void main(String[] args) {
+        String str = new String("ab");
+    }
+}
+```
+
+<span style="color:red; font-weight:bold; font-size:20px">2 个</span>
+
+1. 一个是new 关键字在堆中创建的
+
+2. 另一个是字符串常量池中的 （字节码指令：`ldc` ）
+
+   <img src="E:\mdFiles\JVM\尚硅谷-JVM视频学习笔记\picture\chapter13-3.png" width="45%">
+
+```java
+package com.atguigu.java2;
+
+/**
+ * description 126P——newString() 到底创建了几个对象
+ *
+ * @author Leet
+ * @date 2020-12-28 15:28
+ **/
+public class StringNewTest {
+    public static void main(String[] args) {
+//        String str = new String("ab");
+        String str = new String("a") + new String("b");
+    }
+}
+```
+
+<span style="color:red; font-weight:bold; font-size:20px">6 个</span>
+
+<img src="E:\mdFiles\JVM\尚硅谷-JVM视频学习笔记\picture\chapter13-4.png" width="60%">
+
+## 13.5.2  回答下面的结果
+
+```java
+package com.atguigu.java2;
+
+/**
+ * description 127P——关于intern()的面试难题
+ *
+ * @author Leet
+ * @date 2020-12-28 15:56
+ **/
+public class StringIntern {
+    public static void main(String[] args) {
+        String s = new String("1");
+        s.intern();
+        String s2 = "1";
+        System.out.println(s == s2);  //JDK6/7/8:false
+
+        String s3 = new String("1") + new String("1");
+        s3.intern();  // JDK6 与 JDK7/8 的处理方式不同（见图）
+        String s4 = "11";
+        System.out.println(s3 == s4);  //JDK6:false  JDK7/8:true
+    }
+}
+```
+
+<img src="E:\mdFiles\JVM\尚硅谷-JVM视频学习笔记\picture\chapter13-5.png" width="45%">
+
+### 13.5.2.1  扩展
+
+```java
+public class StringInternPlus {
+    public static void main(String[] args) {
+        String s3 = new String("1") + new String("1");
+        String s4 = "11";
+        String s5 = s3.intern(); 
+        System.out.println(s3 == s4); 
+        System.out.println(s5 == s4); 
+    }
+}
+```
+
+false  true
+
+# 13.6  String Table 的垃圾回收
+
+```java
+package com.atguigu.java3;
+
+/**
+ * description 132P——StringTable的垃圾回收测试
+ *      -Xms10M -Xmx10M -XX:+PrintStringTableStatistics -XX:+PrintGCDetails
+ *
+ * @author Leet
+ * @date 2020-12-28 16:34
+ **/
+public class StringGCTest {
+    public static void main(String[] args) {
+        for (int i = 0; i < 100000; i++) {
+            String.valueOf(i).intern();
+        }
+    }
+}
+```
 
 
 
-13.7  G1 中的 String 去重操作
+# 13.7  G1 中的 String 去重操作
 
 
 
