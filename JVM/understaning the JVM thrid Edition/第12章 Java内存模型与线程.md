@@ -95,4 +95,8 @@ Java 内存模型执行 8 种操作时，必须满足以下 8 种规则（略，
 
 ### 12.3.6 先行发生原则
 
-<img src="./pictures/12-4.png" height="400"/>
+<img src="./pictures/12-4.png" height="450"/>
+
+## 12.4 Java与线程
+
+<img src="./pictures/12-5.png" height="750"/>
